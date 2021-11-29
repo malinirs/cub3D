@@ -2,7 +2,10 @@ NAME	=	cub3D
 
 SRC		=	main.c \
 			get_next_line.c \
-#			get_next_line_utils.c
+			open_file.c \
+			check_symbol_map.c \
+			check_number_rgb.c \
+			pars_sprites_wall.c \
 
 
 
