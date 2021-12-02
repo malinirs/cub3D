@@ -41,11 +41,12 @@ static void	write_remainder(char **line, char **remainder)
 static int	read_file(int fd, char **remainder, char **line, char *buffer)
 {
 	int	byte_was_read;
+	char *t;
 
 	byte_was_read = 1;
 	while (byte_was_read && check_remainder(*remainder) == 0)
 	{
-		byte_was_read = read(fd, buffer, 1);
+		byte_was_read = read(fd, buffer, 1000);
 		if (byte_was_read == -1)
 		{
 			*line = NULL;
@@ -56,7 +57,11 @@ static int	read_file(int fd, char **remainder, char **line, char *buffer)
 		if (!(*remainder))
 			*remainder = ft_strdup(buffer);
 		else
+		{
+			t = *remainder;
 			*remainder = ft_strjoin(*remainder, buffer);
+			free (t); /** ДОРАБОТАТЬ, free ДОБАВИТЬ  */
+		}
 	}
 	write_remainder(line, remainder);
 	free(buffer);
@@ -64,6 +69,8 @@ static int	read_file(int fd, char **remainder, char **line, char *buffer)
 		return (1);
 	return (0);
 }
+
+#include <stdio.h>
 
 int	get_next_line(int fd, char **line)
 {
@@ -73,9 +80,17 @@ int	get_next_line(int fd, char **line)
 
 	if (fd < 0 || !line)
 		return (-1);
-	buffer = malloc(sizeof(char) * (1 + 1));
+	buffer = malloc(sizeof(char) * (1000 + 1));
+
+//	printf("%p\n", buffer);
+//	printf("%p\n", remainder);
+
 	if (!buffer)
 		return (-1);
 	result = read_file(fd, &remainder, line, buffer);
+
+//	if (result)
+//		free(*remainder);
+//	printf("%p\n", *remainder);
 	return (result);
 }

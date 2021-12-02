@@ -12,7 +12,7 @@ static int	check_space(char *str, t_plan *plan)
 	while (str[space] == ' ')
 		space++;
 	if (space - i == 0)
-		error_and_close_program("Error: incorrect sprite address\n", plan, 1);
+		close_program("Error: incorrect sprite address\n", plan, 1);
 	return (space);
 }
 
@@ -33,44 +33,30 @@ static void	write_value(char **str, char *value, t_plan *plan, int i)
 			space++;
 		}
 		if (value[count] != '\0')
-			error_and_close_program("Error: incorrect sprite address\n",plan, 1);
+			close_program("Error: incorrect sprite address\n", plan, 1);
 		*str = ft_substr(&value[space], 0, count - space);
+		if (!(*str))
+			close_program("Memory allocation error\n", plan, 1);
 	}
 	else
-		error_and_close_program("Error: incorrect sprite address\n", plan, 1);
+		close_program("Error: incorrect sprite address\n", plan, 1);
 }
 
-static void	pars_sprites_wall_continue(t_plan *plan, int i)
+static void	check_value(t_plan *plan, int i)
 {
-	while (!ft_strncmp(plan->map[i], "\0", 1))
-		i++;
-	while (plan->map[i] && plan->map[i][0] != '\0')
-	{
-		if (!ft_strncmp(plan->map[i], "F", 1))
-			write_value(&plan->c_flor, plan->map[i], plan, i);
-		else if (!ft_strncmp(plan->map[i], "C", 1))
-			write_value(&plan->c_ceil, plan->map[i], plan, i);
-		else
-			error_and_close_program("Error: incorrect color number\n", plan, 1);
-		i++;
-	}
 	if (!plan->wall_n || !plan->wall_s || !plan->wall_w || !plan->wall_e || \
 		!plan->c_flor || !plan->c_ceil)
-		error_and_close_program("Error: invalid map\n", plan,1);
-	while (!ft_strncmp(plan->map[i], "\0", 1))
-		i++;
+		close_program("Error: invalid map\n", plan, 1);
+	plan->count = i;
 }
 
-void	pars_sprites_wall(t_plan *plan)
+void	pars_sprites_wall(t_plan *plan, int i)
 {
-	int	i;
-
-	i = 0;
-	while (!ft_strncmp(plan->map[i], "\0", 1))
-		i++;
-	while (plan->map[i] && plan->map[i][0] != '\0')
+	while (plan->map[++i])
 	{
-		if (!ft_strncmp(plan->map[i], "WE", 2))
+		if (!ft_strncmp(plan->map[i], "\0", 1))
+			;
+		else if (!ft_strncmp(plan->map[i], "WE", 2))
 			write_value(&plan->wall_w, plan->map[i], plan, i);
 		else if (!ft_strncmp(plan->map[i], "EA", 2))
 			write_value(&plan->wall_e, plan->map[i], plan, i);
@@ -78,11 +64,16 @@ void	pars_sprites_wall(t_plan *plan)
 			write_value(&plan->wall_n, plan->map[i], plan, i);
 		else if (!ft_strncmp(plan->map[i], "SO", 2))
 			write_value(&plan->wall_s, plan->map[i], plan, i);
+		else if (!ft_strncmp(plan->map[i], "F", 1))
+			write_value(&plan->c_flor, plan->map[i], plan, i);
+		else if (!ft_strncmp(plan->map[i], "C", 1))
+			write_value(&plan->c_ceil, plan->map[i], plan, i);
+		else if (plan->map[i][0] == '1')
+			break ;
 		else
-			error_and_close_program("Error: incorrect sprite address\n", plan, 1);
-		i++;
+			close_program("Error: invalid map\n", plan, 1);
 	}
-	pars_sprites_wall_continue(plan, i);
+	check_value(plan, i);
 
 //	printf("plan->wall_n = %s\n", plan->wall_n);
 //	printf("plan->wall_s = %s\n", plan->wall_s);

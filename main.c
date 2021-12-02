@@ -1,6 +1,6 @@
 #include "cub3D.h"
 
-int	error_and_close_program(char *str, t_plan *plan, int code)
+int	close_program(char *str, t_plan *plan, int code)
 {
 	int	i;
 
@@ -43,15 +43,17 @@ void	check_argc_and_open_map(int argc, char **argv, t_plan *plan)
 {
 	init(plan);
 	if (argc == 1)
-		error_and_close_program("Error: file is missing\n", plan, 1);
+		close_program("Error: file is missing\n", plan, 1);
 	else if (argc == 2)
 	{
 		check_extension_file(argv[1], plan);
+
+
 		open_file(argv[1], plan);
 		check_symbol_map(plan);
 	}
 	else if (argc > 2)
-		error_and_close_program("Error: many arguments\n", plan, 1);
+		close_program("Error: many arguments\n", plan, 1);
 }
 
 void	parser(int argc, char **argv, t_plan *plan)
@@ -66,5 +68,12 @@ int	main(int argc, char **argv)
 	t_plan	plan;
 
 	parser(argc, argv, &plan);
+
+	/** основная работа */
+
+	close_program("OK", &plan, 0); /** в конце */
+
+	while (1);
+
 	return (0);
 }
