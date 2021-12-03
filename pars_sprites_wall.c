@@ -68,10 +68,12 @@ void	pars_sprites_wall(t_plan *plan, int i)
 			write_value(&plan->c_flor, plan->map[i], plan, i);
 		else if (!ft_strncmp(plan->map[i], "C", 1))
 			write_value(&plan->c_ceil, plan->map[i], plan, i);
-		else if (plan->map[i][0] == '1')
-			break ;
 		else
-			close_program("Error: invalid map\n", plan, 1);
+			break ;
+//		else if (plan->map[i][0] == '1')
+//			break ;
+//		else
+//			close_program("Error: invalid map\n", plan, 1);
 	}
 	check_value(plan, i);
 

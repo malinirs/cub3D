@@ -29,10 +29,21 @@ typedef struct	s_plan
 	int		numb_color; /** количество цветов */
 	int		numb_commas; /** количество запятых */
 	int		count; /** счетчик по y */
+	char	*space;
+	char	start;
 }				t_plan;
 
+typedef struct s_plr
+{
+	double PosX;/**позиция игрока*/
+	double PosY;/**позиция игрока*/
+	double DirX;/**вектор*/
+	double DirY;/**вектор*/
+	double PlaneX;
+	double PlaneY;
+	double angle; /**угол*/
 
-
+}        t_plr;
 
 /** main.c */
 int		close_program(char *str, t_plan *plan, int code);
@@ -45,12 +56,15 @@ void	check_extension_file(char *temp, t_plan *plan);
 void	open_file(char *str_for_read, t_plan *plan);
 
 /** check_symbol_map.c */
-void	check_symbol_map(t_plan *plan);
+void	check_symbol_map(t_plan *plan, t_plr *plr);
 
 /** check_number_rgb.c */
 void	check_numb_color(t_plan *plan);
 
 /** pars_sprites_wall.c */
 void	pars_sprites_wall(t_plan *plan, int i);
+
+/** main_parsing.c */
+void	main_parsing(t_plan *plan);
 
 #endif

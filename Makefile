@@ -6,6 +6,7 @@ SRC		=	main.c \
 			check_symbol_map.c \
 			check_number_rgb.c \
 			pars_sprites_wall.c \
+			main_parsing.c \
 
 
 

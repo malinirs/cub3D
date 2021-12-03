@@ -39,7 +39,7 @@ void	init(t_plan *plan)
 	plan->c_ceil = NULL;
 }
 
-void	check_argc_and_open_map(int argc, char **argv, t_plan *plan)
+void	parser(int argc, char **argv, t_plan *plan, t_plr *plr)
 {
 	init(plan);
 	if (argc == 1)
@@ -47,33 +47,25 @@ void	check_argc_and_open_map(int argc, char **argv, t_plan *plan)
 	else if (argc == 2)
 	{
 		check_extension_file(argv[1], plan);
-
-
 		open_file(argv[1], plan);
-		check_symbol_map(plan);
+		check_symbol_map(plan, plr);
 	}
 	else if (argc > 2)
 		close_program("Error: many arguments\n", plan, 1);
 }
 
-void	parser(int argc, char **argv, t_plan *plan)
-{
-	check_argc_and_open_map(argc, argv, plan);
-}
-
-
-
 int	main(int argc, char **argv)
 {
 	t_plan	plan;
+	t_plr	plr;
 
-	parser(argc, argv, &plan);
+	parser(argc, argv, &plan, &plr);
 
 	/** основная работа */
 
 	close_program("OK", &plan, 0); /** в конце */
 
-	while (1);
+//	while (1);
 
 	return (0);
 }

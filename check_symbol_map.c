@@ -16,19 +16,6 @@ static void	search_width(t_plan *plan)
 		close_program("Error: invalid map\n", plan, 1);
 }
 
-static char	*pad_spaces(int i)
-{
-	char	*str;
-	int		count;
-
-	count = -1;
-	str = malloc(sizeof(char) * (i + 1));
-	while (++count < i)
-		str[count] = ' ';
-	str[i] = '\0';
-	return (str);
-}
-
 static void	replace_map(t_plan *plan)
 {
 	char	**temp;
@@ -48,6 +35,18 @@ static void	replace_map(t_plan *plan)
 	plan->map = temp;
 }
 
+static char	*pad_spaces(int i, t_plan *plan)
+{
+	int		count;
+
+	count = -1;
+	plan->space = malloc(sizeof(char) * (i + 1));
+	while (++count < i)
+		plan->space[count] = ' ';
+	plan->space[i] = '\0';
+	return (plan->space);
+}
+
 static void	rendering_correct_map(t_plan *plan)
 {
 	int		i;
@@ -59,60 +58,22 @@ static void	rendering_correct_map(t_plan *plan)
 		if (plan->len_x > ft_strlen(plan->map[i]))
 		{
 			temp = ft_strjoin(plan->map[i], pad_spaces(plan->len_x -
-			ft_strlen(plan->map[i])));
+			ft_strlen(plan->map[i]), plan));
 			if (!temp)
 				close_program("Memory allocation error\n", plan, 1);
+			free(plan->space);
 			free(plan->map[i]);
 			plan->map[i] = temp;
 		}
 		i++;
 	}
-//	replace_map(plan);
+	replace_map(plan);
 
-	i = -1;
-	while (plan->map[++i])
-		printf("%s|\n", plan->map[i]);
+//	i = -1;
+//	while (plan->map[++i])
+//		printf("%s|\n", plan->map[i]);
 
 }
-
-//t_bool	check_around(int **map, t_plan map_size, int ln, int col)
-//{
-//	if ((map[ln][col] == 0 && ln > 0 && ln < map_size.y - 1
-//		 && col > 0 && col < map_size.x - 1
-//		 && ((map[ln - 1][col] == 0 || map[ln - 1][col] == 1)
-//			 && (map[ln + 1][col] == 0 || map[ln + 1][col] == 1)
-//			 && (map[ln][col - 1] == 0 || map[ln][col - 1] == 1)
-//			 && (map[ln][col + 1] == 0 || map[ln][col + 1] == 1)
-//			 && (map[ln - 1][col - 1] == 0 || map[ln - 1][col - 1] == 1)
-//			 && (map[ln + 1][col + 1] == 0 || map[ln + 1][col + 1] == 1)
-//			 && (map[ln + 1][col - 1] == 0 || map[ln + 1][col - 1] == 1)
-//			 && (map[ln - 1][col + 1] == 0 || map[ln - 1][col + 1] == 1)))
-//		|| map[ln][col] == 1 || map[ln][col] == -1)
-//		return (true);
-//	return (false);
-//}
-//
-//void	parsing_map(t_plan *plan)
-//{
-//	int	i;
-//	int	j;
-//
-//	i = 0;
-//	if (map_size.y < 3 || map_size.x < 3)
-//		close_program("Error: invalid map\n", plan,1);
-//	while (i < map_size.y)
-//	{
-//		j = -1;
-//		while (++j < map_size.x)
-//		{
-//			if (!check_around(map, map_size, i, j)
-//				|| ((i == 0 || i == map_size.y - 1) && map[i][j] == 0))
-//				close_program("Error: invalid map\n", plan,1);
-//		}
-//		i++;
-//	}
-//}
-
 
 static void	check_symbol_sprites(char *str, t_plan *plan)
 {
@@ -126,7 +87,35 @@ static void	check_symbol_sprites(char *str, t_plan *plan)
 	}
 }
 
-void	check_symbol_map(t_plan *plan)
+void	number_players(t_plan *plan, t_plr *plr)
+{
+	int	i;
+	int	j;
+	int	player;
+
+	i = -1;
+	player = 0;
+	while (++i < plan->len_y)
+	{
+		j = -1;
+		while (++j < plan->len_x)
+		{
+			if (plan->map[i][j] == 'N' || plan->map[i][j] == 'S' || \
+			plan->map[i][j] == 'W' || plan->map[i][j] == 'E')
+			{
+				plan->start = plan->map[i][j];
+				plr->PosX = j;
+				plr->PosY = i;
+				plan->map[i][j] = '0';
+				player++;
+			}
+		}
+	}
+	if (player != 1)
+		close_program("Error: wrong number of players\n", plan, 1);
+}
+
+void	check_symbol_map(t_plan *plan, t_plr *plr)
 {
 	pars_sprites_wall(plan, -1);
 	check_numb_color(plan);
@@ -135,5 +124,12 @@ void	check_symbol_map(t_plan *plan)
 	check_symbol_sprites(plan->wall_w, plan);
 	check_symbol_sprites(plan->wall_e, plan);
 	search_width(plan);
-//	rendering_correct_map(plan);
+	rendering_correct_map(plan);
+	main_parsing(plan);
+	number_players(plan, plr);
+
+
+	int i = -1;
+	while (plan->map[++i])
+		printf("%s|\n", plan->map[i]);
 }

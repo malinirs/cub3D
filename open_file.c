@@ -57,9 +57,6 @@ void	open_file(char *str_for_read, t_plan *plan)
 	while (get_next_line(plan->fd, &line))
 	{
 		plan->map[plan->len_y] = line;
-
-//		printf("%p\n", line);
-
 		if (!plan->map[plan->len_y])
 			close_program("File read error!\n", plan, 1);
 		plan->len_y++;
@@ -68,17 +65,7 @@ void	open_file(char *str_for_read, t_plan *plan)
 	plan->map[plan->len_y + 1] = NULL;
 	close(plan->fd);
 
-//	printf("%p\n", line);
-
-//	int i = -1;
-//	while (plan->map[++i])
-//		printf("%p\n", plan->map[i]);
-//	printf("%p\n", plan->map);
-
-
-
 //	int i = -1;
 //	while (plan->map[++i])
 //		printf("%s\n", plan->map[i]);
-	while (1);
 }
