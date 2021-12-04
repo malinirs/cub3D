@@ -6,7 +6,7 @@
 /*   By: awoods <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/25 21:37:09 by awoods            #+#    #+#             */
-/*   Updated: 2021/04/25 21:37:11 by awoods           ###   ########.fr       */
+/*   Updated: 2021/12/04 23:11:46 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*ft_malloc_and_free(char **str, size_t	i, size_t	j, size_t	temp)
 	return (*str);
 }
 
-size_t 	ft_check_nbr_str(char const	*s, char	c)
+size_t	ft_check_nbr_str(char const *s, char c)
 {
 	size_t	i;
 	size_t	nb_str;
@@ -52,8 +52,7 @@ size_t 	ft_check_nbr_str(char const	*s, char	c)
 	return (nb_str);
 }
 
-void	ft_nbr_index_and_copy(char const	*s, char	c, char	**str,
-							  size_t	nb_str)
+void	ft_nbr_index_and_copy(char const *s, char c, char **str, size_t nb_str)
 {
 	size_t	i;
 	size_t	j;
@@ -79,7 +78,7 @@ void	ft_nbr_index_and_copy(char const	*s, char	c, char	**str,
 	str[j] = NULL;
 }
 
-char	**ft_split(char const	*s, char	c)
+char	**ft_split(char const *s, char c)
 {
 	char	**str;
 	size_t	nb_str;

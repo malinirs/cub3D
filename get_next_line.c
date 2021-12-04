@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: awoods <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/04 22:55:24 by awoods            #+#    #+#             */
+/*   Updated: 2021/12/04 22:55:26 by awoods           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Libft/libft.h"
 
-static int 	check_remainder(char	*remainder)
+static int	check_remainder(char	*remainder)
 {
 	if (!remainder)
 		return (0);
@@ -40,7 +52,7 @@ static void	write_remainder(char **line, char **remainder)
 
 static char	*join(char **remainder, char *buffer)
 {
-	char *t;
+	char	*t;
 
 	t = *remainder;
 	*remainder = ft_strjoin(*remainder, buffer);

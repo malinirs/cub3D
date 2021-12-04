@@ -5,8 +5,10 @@ SRC		=	main.c \
 			open_file.c \
 			check_symbol_map.c \
 			check_number_rgb.c \
-			pars_sprites_wall.c \
+			pars_sprites_color.c \
 			main_parsing.c \
+			parser.c \
+			rendering_map.c \
 
 
 

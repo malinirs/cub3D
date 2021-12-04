@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   open_file.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: awoods <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/04 23:01:25 by awoods            #+#    #+#             */
+/*   Updated: 2021/12/04 23:01:28 by awoods           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3D.h"
 
 void	check_extension_file(char *temp, t_plan *plan)
@@ -53,7 +65,6 @@ void	open_file(char *str_for_read, t_plan *plan)
 	if (plan->fd == -1)
 		close_program("File open error!\n", plan, 1);
 	plan->map = malloc(sizeof(char *) * (check_numb_str(str_for_read, plan)));
-
 	while (get_next_line(plan->fd, &line))
 	{
 		plan->map[plan->len_y] = line;
@@ -64,8 +75,4 @@ void	open_file(char *str_for_read, t_plan *plan)
 	plan->map[plan->len_y] = line;
 	plan->map[plan->len_y + 1] = NULL;
 	close(plan->fd);
-
-//	int i = -1;
-//	while (plan->map[++i])
-//		printf("%s\n", plan->map[i]);
 }

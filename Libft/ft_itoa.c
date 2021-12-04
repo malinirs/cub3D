@@ -6,13 +6,13 @@
 /*   By: awoods <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/23 22:20:08 by awoods            #+#    #+#             */
-/*   Updated: 2021/04/23 22:20:11 by awoods           ###   ########.fr       */
+/*   Updated: 2021/12/03 18:21:05 by awoods           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_check(int	n, int	znak)
+char	*ft_check(int n, int znak)
 {
 	char	*str;
 	int		len;
@@ -40,7 +40,7 @@ char	*ft_check(int	n, int	znak)
 	return (str);
 }
 
-char	*ft_itoa(int	n)
+char	*ft_itoa(int n)
 {
 	char	*str;
 	int		znak;
