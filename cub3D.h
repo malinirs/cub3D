@@ -3,21 +3,79 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: awoods <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: hparis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/04 23:06:00 by awoods            #+#    #+#             */
-/*   Updated: 2021/12/04 23:08:25 by                  ###   ########.fr       */
+/*   Created: 2021/12/05 16:12:00 by hparis            #+#    #+#             */
+/*   Updated: 2021/12/05 16:12:04 by hparis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include <unistd.h>
 # include <stdio.h>
-# include <stdlib.h>
+# include <unistd.h>
+# include <math.h>
 # include <fcntl.h>
-# include "Libft/libft.h"
+# include "minilibx/mlx.h"
+# include "./libft/libft.h"
+
+# define W_KEY			13
+# define A_KEY			0
+# define S_KEY			1
+# define D_KEY			2
+# define RL_KEY			123
+# define RR_KEY			124
+# define ESC_KEY		53
+
+# define MOVE_SPEED		0.05
+# define ROT_SPEED		0.05
+
+# define RES_X			1280
+# define RES_Y			720
+
+# define SPRITE_SIZE	64
+
+# define MAP_SIZE		5
+# define MAP_W_COLOR	0xFFFFFF
+# define MAP_PL_COLOR	0xFF0000
+# define MAP_RAY_COLOR	0x990099
+# define M_2PI			6.283185307179586
+
+typedef struct s_vector
+{
+	double	x;
+	double	y;
+}				t_vector;
+
+typedef struct s_dist
+{
+	double	sidedistx;
+	double	sidedisty;
+	double	deltadistx;
+	double	deltadisty;
+	int		stepx;
+	int		stepy;
+	int		x;
+	int		y;
+}				t_dist;
+
+typedef struct s_img
+{
+	void	*img;
+	char	*addr;
+	int		bits;
+	int		line_length;
+	int		endian;
+}				t_img;
+
+typedef struct s_wall
+{
+	t_img	*spr_n;
+	t_img	*spr_s;
+	t_img	*spr_w;
+	t_img	*spr_e;
+}				t_wall;
 
 typedef struct s_plan
 {
@@ -25,34 +83,81 @@ typedef struct s_plan
 	char	**map;
 	int		len_y;
 	int		len_x;
-
 	int		heigh;
 	int		width;
-
-	char	*wall_n;/**путь к спрайту стены ./sprites/wall.xpm*/
-	char	*wall_s;/**путь к спрайту стены ./sprites/wall.xpm*/
-	char	*wall_w;/**путь к спрайту стены ./sprites/wall.xpm*/
-	char	*wall_e;/**путь к спрайту стены ./sprites/wall.xpm*/
-	char	*c_flor;/**строка с цветом пола */
-	char	*c_ceil;/**строка с цветом потолока */
-
-	int		numb_color; /** количество цветов */
-	int		numb_commas; /** количество запятых */
-	int		count; /** счетчик по y */
-	char	*space;
+	char	*wall_n;
+	char	*wall_s;
+	char	*wall_w;
+	char	*wall_e;
+	char	*c_flor;
+	char	*c_ceil;
 	char	start;
-}				t_plan;
+	int		numb_color;
+	int		numb_commas;
+	int		count;
+	char	*space;
+}					t_plan;
 
 typedef struct s_plr
 {
-	double PosX;/**позиция игрока*/
-	double PosY;/**позиция игрока*/
-	double DirX;/**вектор*/
-	double DirY;/**вектор*/
-	double PlaneX;
-	double PlaneY;
-	double angle; /**угол*/
-}				t_plr;
+	double	pos_x;
+	double	pos_y;
+	double	dir_x;
+	double	dir_y;
+	double	plane_x;
+	double	plane_y;
+	double	angle;
+}			t_plr;
+
+typedef struct s_keys
+{
+	int		w;
+	int		a;
+	int		s;
+	int		d;
+	int		arrow_l;
+	int		arrow_r;
+}				t_keys;
+
+typedef struct s_game
+{
+	void	*mlx;
+	void	*win;
+	long	floor;
+	long	ceiling;
+	t_keys	*key;
+	t_plr	*plr;
+	t_wall	*wall;
+	t_plan	*plan;
+	t_img	*img;
+}			t_game;
+
+/**main*/
+int		end_game(t_game *game);
+void	puterror(char *line);
+int		main_loop(t_game *game);
+
+/**keys*/
+int		press_key(int keycode, t_game *game);
+int		unpress_key(int keycode, t_game *game);
+
+/**color_back*/
+void	my_mlx_pixel_put(t_game *game, int x, int y, int color);
+void	print_background(t_game *game, int x, int y);
+void	init_color(long *color, char *line);
+
+/**travel*/
+void	travel(t_game *game, double step_x, double step_y);
+
+/**initial*/
+void	initial(t_game *game);
+
+/**init_sprite*/
+void	init_sprite(t_game *game);
+void	init_dist(t_dist *dist, t_vector ray, t_plr *plr);
+
+/**print_wall*/
+void	print_walls(t_game *game, int x);
 
 /** parser.c */
 void	parser(int argc, char **argv, t_plan *plan, t_plr *plr);
@@ -81,5 +186,8 @@ void	main_parsing(t_plan *plan);
 void	search_width(t_plan *plan);
 void	rendering_correct_map(t_plan *plan);
 void	remove_empty_lines(t_plan *plan);
+
+/** print_map_bonus.c */
+void	print_minimap(t_game *game);
 
 #endif

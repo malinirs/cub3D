@@ -29,8 +29,8 @@ static int	number_players(t_plan *plan, t_plr *plr)
 			plan->map[i][j] == 'W' || plan->map[i][j] == 'E')
 			{
 				plan->start = plan->map[i][j];
-				plr->PosX = j;
-				plr->PosY = i;
+				plr->pos_x = j;
+				plr->pos_y = i;
 				plan->map[i][j] = '0';
 				player++;
 			}

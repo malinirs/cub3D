@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Libft/libft.h"
+#include "cub3D.h"
 
 static int	check_remainder(char	*remainder)
 {
